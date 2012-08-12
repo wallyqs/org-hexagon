@@ -1,0 +1,92 @@
+* OrgHexagon
+
+#+begin_quote
+The universe (which others call the Library) is composed of an
+indefinite and perhaps infinite number of hexagonal galleries, with
+vast air shafts between, surrounded by very low railings. (...)
+The idealists argue that the hexagonal rooms are a necessary form of
+absolute space or, at least, of our intuition of space.
+
+                    - Jorge Luis Borges, The Library of Babel
+#+end_quote
+
+** Introduction
+
+OrgHexagon is a simple Sinatra application that features an API
+which can be called through Emacs to send texts written in org-mode.
+
+Its objectives are:
+
+- Have an API to publish texts written in org-mode from Emacs through HTTP
+- Relatively simple to deploy
+- Minimal layout design
+
+** How to setup
+
+Clone this repository:
+
+#+begin_src sh
+git clone git://github.com/wallyqs/org-hexagon
+bundle install
+bundle package
+#+end_src
+
+You need to have a MongoDB data store available so that the texts can be saved,
+so you also need to modify the =config/mongo.yml= to point it your MongoDB.
+
+Some notes about the setup:
+
+- It uses the =org-ruby= gem to render the org-mode texts to HTML. This saves
+  having to install a full Emacs instance on your server.
+
+- By default it is going to use =Coderay= to highlight the source blocks.
+  In case you want to use =pygments.rb= you need to include this gem
+  in the Gemfile.
+
+- It includes some built-in support to run it on Cloudfoundry.
+  Just include the =cf-runtime= gem into your Gemfile
+  and =create-service mongodb=, =bind-service= the MongoDB store.
+
+** Setting up the client
+
+- Load the =org-hexagon.el= client included in this repo.
+
+- Set the following in your =.emacs=:
+  #+begin_src emacs-lisp
+    (setq org-hexagon-auth '("librarian" . "secret"))
+  #+end_src
+
+** How to use
+
+Open a buffer with some org-mode text:
+
+#+begin_src org
+  * Hello world
+
+  Writing using =org-mode= markup to be published.
+
+#+end_src
+
+Then use =M-x org-hexagon-post= in the buffer to publish org-mode text.
+
+You will be able to view your post online at =http://your-url.com/texts=.
+
+** Using PROPERTIES to modify publishing settings of your text
+
+You can use the =PROPERTIES= drawer from org-mode to configure
+the way you want to publish the text.
+
+For example, if you post a the text with the following properties:
+
+#+begin_src org
+  * Hello world
+    :PROPERTIES:
+    :id:       1
+    :slug:     hello-world
+    :shelf:    blog
+    :public:   yes
+    :END:
+#+end_src
+
+A publicly accessible url =http://your-url.com/blog/hello-world= will be available,
+as well as a url like =http://your-url.com/texts/1= which only you will be able to browse.
