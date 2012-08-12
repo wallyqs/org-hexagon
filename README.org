@@ -44,7 +44,7 @@ Some notes about the setup:
   in the Gemfile.
 
 - It includes some built-in support to run it on Cloudfoundry.
-  Just =create-service mongodb= and =bind-service= your MongoDB.
+  Just =create-service mongodb= and =bind-service= your MongoDB to save the texts.
 
 ** Setting up the client
 
@@ -89,3 +89,21 @@ For example, if you post a the text with the following properties:
 
 A publicly accessible url =http://your-url.com/blog/hello-world= will be available,
 as well as a url like =http://your-url.com/texts/1= which only you will be able to browse.
+
+* LICENSE
+
+#+begin_quote
+Copyright (C) 2012 Quevedo, Waldemar
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+#+end_quote
