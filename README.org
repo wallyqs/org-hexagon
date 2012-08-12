@@ -1,4 +1,4 @@
-* OrgHexagon
+* OrgHexagon [0%]
 
 #+begin_quote
 The universe (which others call the Library) is composed of an
@@ -10,18 +10,18 @@ absolute space or, at least, of our intuition of space.
                     - Jorge Luis Borges, The Library of Babel
 #+end_quote
 
-** Introduction
+** TODO Introduction
 
 OrgHexagon is a simple Sinatra application that features an API
 which can be called through Emacs to send texts written in org-mode.
 
-Its objectives are:
+*** Objectives
 
-- Have an API to publish texts written in org-mode from Emacs through HTTP
-- Relatively simple to deploy
-- Minimal layout design
+- [ ] Have an API to publish texts written in org-mode from Emacs through HTTP
+- [ ] Relatively simple to deploy (e.g. not having to setup Emacs on the server)
+- [ ] Minimal layout design
 
-** How to setup
+** TODO How to setup
 
 Clone this repository:
 
@@ -46,7 +46,7 @@ Some notes about the setup:
 - It includes some built-in support to run it on Cloudfoundry.
   Just =create-service mongodb= and =bind-service= your MongoDB to save the texts.
 
-** Setting up the client
+** TODO Setting up the client
 
 - Load the =org-hexagon.el= client included in this repo.
 
@@ -55,7 +55,7 @@ Some notes about the setup:
     (setq org-hexagon-auth '("librarian" . "secret"))
   #+end_src
 
-** How to use
+** TODO How to use
 
 Open a buffer with some org-mode text:
 
@@ -70,7 +70,7 @@ Then use =M-x org-hexagon-post= in the buffer to publish org-mode text.
 
 You will be able to view your post online at =http://your-url.com/texts=.
 
-** Using PROPERTIES to modify publishing settings of your text
+** TODO Using PROPERTIES to modify publishing settings of your text
 
 You can use the =PROPERTIES= drawer from org-mode to configure
 the way you want to publish the text.
