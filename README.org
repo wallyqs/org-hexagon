@@ -44,8 +44,7 @@ Some notes about the setup:
   in the Gemfile.
 
 - It includes some built-in support to run it on Cloudfoundry.
-  Just include the =cf-runtime= gem into your Gemfile
-  and =create-service mongodb=, =bind-service= the MongoDB store.
+  Just =create-service mongodb= and =bind-service= your MongoDB.
 
 ** Setting up the client
 

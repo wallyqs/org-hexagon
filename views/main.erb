@@ -1,10 +1,11 @@
 <html>
   <head>
-    <title>Writings</title>
+    <title>Texts</title>
   </head>
   <body>
     <% @texts.each do |text| %>
-      <%= text.title %>
+      <a href="/texts/<%= text.id %>"><%= text.title %></a>
+      <br />
     <% end %>
   </body>
 </html>
