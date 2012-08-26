@@ -1,0 +1,11 @@
+<html>
+  <head>
+    <title>Texts</title>
+  </head>
+  <body>
+    <% @texts.each do |text| %>
+      <a href="/texts/<%= text.id %>"><%= text.title %></a>
+      <br />
+    <% end %>
+  </body>
+</html>

@@ -14,20 +14,42 @@ module OrgHexagon
     end
 
     get '/' do
-      @texts = Text.all
-
       erb :main
+    end
+
+    get '/texts' do
+      @texts = Text.all
+      erb :texts
     end
 
     get '/texts/:id' do
       text = Text.where(:_id => params[:id]).first
-      @text = Orgmode::Parser.new(text.content).to_html
+      halt 404 unless text
 
-      halt 404  unless @text
+      @text = Orgmode::Parser.new(text.content).to_html
       erb :text
     end
 
-    post '/api/text.:format' do
+    # API methods from here below
+    get '/api/texts.:format' do
+      content_type 'application/json'
+      @texts = Text.all
+
+      @texts.to_json
+    end
+
+    get '/api/texts/:id.:format' do
+      content_type 'application/json'
+
+      text = Text.where(:_id => params[:id]).first
+      halt 404 unless text
+
+      return text.to_json
+    end
+
+    post '/api/texts.:format' do
+      content_type 'application/json'
+
       json = request.body.read
 
       begin
@@ -41,8 +63,8 @@ module OrgHexagon
       else
         return { :status => 500, :message => "Org text content was empty" }.to_json.to_s
       end
-      
-      { :status => 200, :message => "OK", :id => t.id }.to_json.to_s
+
+      { :status => 200, :message => "OK", :_id => t.id }.to_json.to_s
     end
   end
 end

@@ -1,4 +1,5 @@
 require 'cfruntime'
+require 'sinatra'
 require 'mongoid'
 
 module OrgHexagon
@@ -6,7 +7,12 @@ module OrgHexagon
     if ::CFRuntime::CloudApp.running_in_cloud?
       config.master = ::CFRuntime::MongoClient.create.db
     else
-      config.master = Mongo::Connection.new.db('org_hexagon')
-    end  
+
+      if settings.environment == :test
+        config.master = Mongo::Connection.new.db('org_hexagon_test')
+      else
+        config.master = Mongo::Connection.new.db('org_hexagon')
+      end
+    end
   end
 end
