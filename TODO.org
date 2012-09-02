@@ -20,8 +20,9 @@ Creates or updates a new text.
 Basic Authentication with Warden
 
 ** TODO Feature :: Ignore all headlines but the first one
-* [1/1] Deploying
+* [1/2] Deploying
 ** DONE Cloudfoundry support
+** TODO Config with YAML file
 * [3/3] Testing
 ** DONE Setup Rspec tests
 ** DONE server_spec.org
