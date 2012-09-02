@@ -1,4 +1,4 @@
-* OrgHexagon [0%]
+* OrgHexagon
 
 #+begin_quote
 The universe (which others call the Library) is composed of an
@@ -13,7 +13,7 @@ absolute space or, at least, of our intuition of space.
 ** TODO Introduction
 
 OrgHexagon is a simple Sinatra application that features an API
-which can be called through Emacs to send texts written in org-mode.
+which can be called through Emacs to publish texts written in org-mode.
 
 *** Objectives
 
@@ -66,7 +66,7 @@ Open a buffer with some org-mode text:
 
 #+end_src
 
-Then use =M-x org-hexagon-post= in the buffer to publish org-mode text.
+Then use =M-x org-hexagon-sync-text= in the buffer to publish org-mode text.
 
 You will be able to view your post online at =http://your-url.com/texts=.
 

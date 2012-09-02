@@ -1,0 +1,108 @@
+#+TITLE: Org Hexagon Development
+
+* [2/5] API Client
+** DONE Create buffer with all texts
+** DONE Post a new text
+** TODO Update a text
+** TODO Auth request
+** TODO Insert id in text first headline
+* [1/3] API Backend
+** DONE Basic API
+*** DONE GET /api/texts.json
+
+Gets a buffer with all texts so far.
+
+*** DONE POST /api/texts.json - 
+
+Creates or updates a new text.
+** TODO Authentication
+
+Basic Authentication with Warden
+
+** TODO Feature :: Ignore all headlines but the first one
+* [1/1] Deploying
+** DONE Cloudfoundry support
+* [3/3] Testing
+** DONE Setup Rspec tests
+** DONE server_spec.org
+** DONE text_spec.org
+* [0/2] Site
+** TODO Layout for individual text
+** TODO Layout for all texts
+* TODO Feature :: Shelves
+
+By setting =:shelf:= in the properties drawer, you should be able
+to tag the text so that they can be accessed through a special route.
+
+Example:
+
+#+begin_src org
+ * Some writing
+  :PROPERTIES:
+  :shelf:    ideas
+  :END:
+
+Writing...
+ 
+#+end_src
+
+Then the text would become available under a route like:
+
+#+begin_src ruby
+get '/:shelf/:id'
+#+end_src
+
+After the text is created, the =:_id:= attribute is appended to the text,
+so that it can be updated.
+
+#+begin_src org
+ * Some writing
+  :PROPERTIES:
+  :_id:      98128912981289
+  :shelf:    ideas
+  :END:
+
+Writing updated...
+#+end_src
+
+* TODO Feature :: Blog shelf
+
+This would create a route like:
+
+#+begin_src ruby
+get '/blog/:year/:month/:day/:slug'
+#+end_src
+
+which could be used to have something similar to a blog.
+In order for a text to be part of this shelf in needs to have 
+the following attributes in the properties drawer.
+
+#+begin_src org
+ * Hello world
+  :PROPERTIES:
+  :id:       1
+  :slug:     hello-world
+  :shelf:    blog
+  :public:   yes
+  :END:
+
+  Example blog post
+#+end_src
+
+* TODO Feature :: Bookmarks shelf
+
+This is a special shelf that makes a list of links a-la HN.
+
+#+begin_src org
+ * Interesting link
+  :PROPERTIES:
+  :shelf:    bookmarks
+  :END:
+
+#+end_src
+
+These can be later browsed through the route:
+
+#+begin_src ruby
+get '/bookmarks/:id'
+#+end_src
