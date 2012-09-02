@@ -14,19 +14,23 @@ module OrgHexagon
     end
 
     get '/' do
+      @texts = Text.all
       erb :main
+    end
+
+    not_found do
+      erb :"404"
     end
 
     get '/texts' do
       @texts = Text.all
-      erb :texts
+      erb :main
     end
 
     get '/texts/:id' do
-      text = Text.where(:_id => params[:id]).first
-      halt 404 unless text
+      @text = Text.where(:_id => params[:id]).first
+      halt 404 unless @text
 
-      @text = Orgmode::Parser.new(text.content).to_html
       erb :text
     end
 

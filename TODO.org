@@ -26,7 +26,11 @@ Basic Authentication with Warden
 ** DONE Setup Rspec tests
 ** DONE server_spec.org
 ** DONE text_spec.org
-* [0/2] Site
+* [1/3] Site
+** DONE Scaffold the layout from the site
+
+Used the awesome http://html5boilerplate.com/ for this.
+
 ** TODO Layout for individual text
 ** TODO Layout for all texts
 * TODO Feature :: Shelves

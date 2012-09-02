@@ -27,5 +27,9 @@ module OrgHexagon
     def parsed_org_text
       Orgmode::Parser.new(self.content)
     end
+
+    def to_html
+      parsed_org_text.to_html
+    end
   end
 end
