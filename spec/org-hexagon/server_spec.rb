@@ -45,13 +45,19 @@ Some text about developing this.
 ORG
 
         # Post one text to the org-hexagon-dev shelf
-        post '/api/texts.json', { :content => org_content, 
-                                  :shelf => 'org-hexagon-dev' }.to_json
+        post '/api/texts.json', 
+        { :content => org_content, 
+          :properties => {
+            :shelf => 'org-hexagon-dev'
+          }}.to_json
         last_response.should be_ok
 
         # Post another text
-        post '/api/texts.json', { :content => SAMPLE_ORG_CONTENT,
-                                  :shelf => 'other-texts' }.to_json
+        post '/api/texts.json',
+        { :content => SAMPLE_ORG_CONTENT,
+          :properties => {
+            :shelf => 'other-texts'
+          }}.to_json
         last_response.should be_ok
 
         resp = JSON.parse(last_response.body)

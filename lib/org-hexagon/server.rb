@@ -28,7 +28,7 @@ module OrgHexagon
       erb :text
     end
 
-    # API : ------------------------------ Texts ------------------------------
+    # API
     get '/api/texts.:format' do
       content_type 'application/json'
       @texts = Text.all
@@ -53,16 +53,11 @@ module OrgHexagon
       begin
         text = JSON.parse(json)
       rescue => e
-
         return {:status => 500, :message => "Error when parsing the request" }.to_json.to_s
       end
 
-      # Use the texts shelf by default
-      shelf = text['shelf'] || 'texts'
-
       if text['content']
-        t = Text.create(:content => text['content'],
-                        :shelf => shelf)
+        t = Text.create(text)
       else
         return { :status => 500, :message => "Org text content was empty" }.to_json.to_s
       end
@@ -74,7 +69,7 @@ module OrgHexagon
       content_type 'application/json'
 
       shelf = params[:shelf]
-      texts = Text.where(:shelf => shelf)
+      texts = Text.where('properties.shelf' => shelf)
 
       texts.to_json
     end
