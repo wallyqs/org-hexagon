@@ -17,14 +17,10 @@
 
     <div class="container">
 
-      <div class="hero-unit">
-        <h1>Org Hexagon</h1>
-      </div>
-
       <div class="row">
         <div class="span16">
           <% @texts.each do |text| %>
-            [<a href="/texts/<%= text.id %>">Permalink</a>]<br />
+            [<a href="/texts/<%= text.id %>">Link</a>]<br />
             <%= text.to_html %>
             <hr />
           <% end %>
@@ -32,10 +28,6 @@
       </div>
 
       <hr />
-
-      <footer>
-        <p>&copy; Waldemar Quevedo, 2012</p>
-      </footer>
 
     </div> <!-- /container -->
 
