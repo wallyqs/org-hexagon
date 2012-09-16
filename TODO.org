@@ -27,14 +27,16 @@ Basic Authentication with Warden
 ** DONE Setup Rspec tests
 ** DONE server_spec.org
 ** DONE text_spec.org
-* [1/3] Site
+* [3/3] Site
 ** DONE Scaffold the layout from the site
 
 Used the awesome http://html5boilerplate.com/ for this.
 
-** TODO Layout for individual text
-** TODO Layout for all texts
-* TODO Feature :: Shelves
+** DONE Layout for individual text
+   CLOCK: [2012-09-15 Sat 20:40]--[2012-09-15 Sat 20:48] =>  0:08
+
+** DONE Layout for all texts
+* TODO [#A] Feature :: Shelves
 
 By setting =:shelf:= in the properties drawer, you should be able
 to tag the text so that they can be accessed through a special route.
@@ -48,13 +50,13 @@ Example:
   :END:
 
 Writing...
- 
 #+end_src
 
-Then the text would become available under a route like:
+Then the text would become available under routes like:
 
 #+begin_src ruby
 get '/:shelf/:id'
+get '/api/shelves/:shelf.json'
 #+end_src
 
 After the text is created, the =:_id:= attribute is appended to the text,
