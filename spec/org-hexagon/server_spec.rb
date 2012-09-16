@@ -34,6 +34,36 @@ module OrgHexagon
         last_response.should be_ok
       end
 
+      it 'should be possible to put a text in a shelf' do
+        org_content = <<-ORG
+* Hello World
+  :PROPERTIES:
+  :shelf:  org-hexagon-dev
+  :END:
+
+Some text about developing this.
+ORG
+
+        # Post one text to the org-hexagon-dev shelf
+        post '/api/texts.json', { :content => org_content, 
+                                  :shelf => 'org-hexagon-dev' }.to_json
+        last_response.should be_ok
+
+        # Post another text
+        post '/api/texts.json', { :content => SAMPLE_ORG_CONTENT,
+                                  :shelf => 'other-texts' }.to_json
+        last_response.should be_ok
+
+        resp = JSON.parse(last_response.body)
+        resp['status'].should == 200
+
+        get '/api/shelves/org-hexagon-dev.json'
+        last_response.should be_ok
+        texts = JSON.parse(last_response.body)
+
+        texts.count.should == 1
+      end
+
       it 'should be possible to get all texts' do
         get '/api/texts.json'
         texts = JSON.parse(last_response.body)

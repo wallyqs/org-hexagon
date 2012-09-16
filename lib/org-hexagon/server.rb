@@ -1,17 +1,11 @@
 require 'sinatra/base'
 require 'org-hexagon/text'
 require 'org-ruby'
-require 'yajl'
 
 module OrgHexagon
   class Server < Sinatra::Base
 
     set :root, File.expand_path(File.join(File.dirname(__FILE__), '..', '..'))
-
-    def initialize
-      super
-      @json_parser = Yajl::Parser.new
-    end
 
     get '/' do
       @texts = Text.all
@@ -34,7 +28,7 @@ module OrgHexagon
       erb :text
     end
 
-    # API methods from here below
+    # API : ------------------------------ Texts ------------------------------
     get '/api/texts.:format' do
       content_type 'application/json'
       @texts = Text.all
@@ -57,18 +51,32 @@ module OrgHexagon
       json = request.body.read
 
       begin
-        text = @json_parser.parse(json)
+        text = JSON.parse(json)
       rescue => e
+
         return {:status => 500, :message => "Error when parsing the request" }.to_json.to_s
       end
 
+      # Use the texts shelf by default
+      shelf = text['shelf'] || 'texts'
+
       if text['content']
-        t = Text.create(:content => text['content']) 
+        t = Text.create(:content => text['content'],
+                        :shelf => shelf)
       else
         return { :status => 500, :message => "Org text content was empty" }.to_json.to_s
       end
 
       { :status => 200, :message => "OK", :_id => t.id }.to_json.to_s
+    end
+
+    get '/api/shelves/:shelf.:format' do
+      content_type 'application/json'
+
+      shelf = params[:shelf]
+      texts = Text.where(:shelf => shelf)
+
+      texts.to_json
     end
   end
 end
