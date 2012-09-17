@@ -45,7 +45,7 @@ module OrgHexagon
       return text.to_json
     end
 
-    post '/api/texts.:format' do
+    put '/api/texts.:format' do
       content_type 'application/json'
 
       json = request.body.read
@@ -53,7 +53,8 @@ module OrgHexagon
       begin
         text = JSON.parse(json)
       rescue => e
-        return {:status => 500, :message => "Error when parsing the request" }.to_json.to_s
+        return { :status => 500,
+                 :message => "Error when parsing the request" }.to_json.to_s
       end
 
       if text['content']

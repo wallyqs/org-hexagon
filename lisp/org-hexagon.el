@@ -46,7 +46,7 @@
     (switch-to-buffer buf)
     (org-mode)))
 
-(defun org-hexagon-sync-text-region(beg end)
+(defun org-hexagon-create-text-region(beg end)
   "Create org-mode text from region"
   (interactive "r")
 
@@ -54,22 +54,33 @@
           (buffer-substring-no-properties beg end))
 	 (property-drawer-list 
 	  (org-hexagon-preprocess-property-drawer-string region))
-
          (org-text
           (json-encode
            `((content . ,region)
 	     (properties . ,property-drawer-list))))
          (url (concat org-hexagon-api-url "texts.json"))
          (response
-          (org-hexagon-request
-           "POST" url org-text))
+          (org-hexagon-request "PUT" url org-text))
          (status (cdr (assoc 'status response))))
 
     (if (equal status 200)
-	(message (concat "Org text created with id: " (cdr (assoc '_id response))))
-      (message "Not saved"))
-    )
-  )
+	(let ((text-id (cdr (assoc '_id response))))
+	  (message (concat "Org text created with id: " text-id))
+	  ;; (org-hexagon-update-property-drawer region text-id))
+      (message "Text not saved"))
+    ))
+
+(defun org-hexagon-update-property-drawer(region text-id)
+  (with-current-buffer
+      (let* ((beg (point-min))
+	     (end (point-max))
+	     (property-drawer-range (org-get-property-block beg end)))
+	(pp property-drawer-range)
+	(when property-drawer-range
+	  (goto-char (car property-drawer-range))
+	  )
+	)
+      ))
 
 ;; helper methods
 (defun org-hexagon-preprocess-property-drawer-string (org-text-region)
