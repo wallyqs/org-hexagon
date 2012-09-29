@@ -1,4 +1,5 @@
 ;; Client for the API from OrgHexagon
+(require 'org)
 (require 'url)
 (require 'json)
 
@@ -52,35 +53,55 @@
 
   (let* ((region
           (buffer-substring-no-properties beg end))
-	 (property-drawer-list 
-	  (org-hexagon-preprocess-property-drawer-string region))
+         (property-drawer-list
+          (org-hexagon-preprocess-property-drawer-string region))
          (org-text
           (json-encode
            `((content . ,region)
-	     (properties . ,property-drawer-list))))
+             (properties . ,property-drawer-list))))
          (url (concat org-hexagon-api-url "texts.json"))
          (response
           (org-hexagon-request "PUT" url org-text))
          (status (cdr (assoc 'status response))))
 
     (if (equal status 200)
-	(let ((text-id (cdr (assoc '_id response))))
-	  (message (concat "Org text created with id: " text-id))
-	  ;; (org-hexagon-update-property-drawer region text-id))
-      (message "Text not saved"))
+        (let* ((text-id (cdr (assoc '_id response)))
+	       (properties `(
+			     (":_id:" . ,text-id)
+			     )))
+          (message (concat "Org text created with id: " text-id))
+          (org-hexagon-update-property-drawer beg end properties))
+      (message "Text not saved!"))
     ))
 
-(defun org-hexagon-update-property-drawer(region text-id)
-  (with-current-buffer
-      (let* ((beg (point-min))
-	     (end (point-max))
-	     (property-drawer-range (org-get-property-block beg end)))
-	(pp property-drawer-range)
-	(when property-drawer-range
-	  (goto-char (car property-drawer-range))
-	  )
-	)
-      ))
+(defun org-hexagon-update-property-drawer(region-begin region-end properties)
+  "Given the beginning and start of the property-drawer in the text,
+this will update the property-drawer with the fields in the assoc list"
+
+  (let* ((property-drawer-range 
+	  (org-get-property-block region-begin region-end)))
+
+    (if property-drawer-range
+	(setq property-drawer-beg (car property-drawer-range))
+      ;; In case we don't have a property drawer, create it here
+      (progn
+	(org-insert-property-drawer)
+	(org-cycle 3)
+	(next-line 1)
+	(setq property-drawer-beg (point))))
+
+    ;; Make a list of the current properties again into an assoc list
+    ;; TODO
+
+    ;; Then override the elements on the list that already exists with the new ones
+    (dolist (pair properties)
+      (let* ((property-key (car pair))
+	     (property-value (cdr pair))
+	     (property-string (concat "  " property-key " " property-value "\n")))
+
+	(insert property-string))
+      )
+    (message "Org Hexagon Text Synced!")))
 
 ;; helper methods
 (defun org-hexagon-preprocess-property-drawer-string (org-text-region)
