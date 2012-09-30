@@ -16,18 +16,18 @@ module OrgHexagon
     end
 
     context 'using the API' do
-      it 'should be possible to create a text and fetch it by _id' do
+      it 'should be possible to create a text and fetch it by id' do
         put '/api/texts.json', { :content => SAMPLE_ORG_CONTENT }.to_json
         last_response.should be_ok
 
         resp = JSON.parse(last_response.body)
         resp['status'].should == 200
 
-        id = resp['_id']
+        id = resp['id']
         get "/api/texts/#{id}.json"
         last_response.should be_ok
         saved_text = JSON.parse(last_response.body)
-        saved_text['_id'].should == resp['_id']
+        saved_text['_id'].should == resp['id']
 
         # HTML pages
         get "/texts/#{id}"

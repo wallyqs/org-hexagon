@@ -47,8 +47,9 @@
     (switch-to-buffer buf)
     (org-mode)))
 
-(defun org-hexagon-create-text-region(beg end)
-  "Create org-mode text from region"
+(defun org-hexagon-sync-text-region(beg end)
+  "Create org-mode text from region.
+NOTE: _id cannot be used as an identifier so we use :id: all the time"
   (interactive "r")
 
   (let* ((region
@@ -65,9 +66,9 @@
          (status (cdr (assoc 'status response))))
 
     (if (equal status 200)
-        (let* ((text-id (cdr (assoc '_id response)))
+        (let* ((text-id (cdr (assoc 'id response)))
 	       (properties `(
-			     (":_id:" . ,text-id)
+			     (":id:" . ,text-id)
 			     )))
           (message (concat "Org text created with id: " text-id))
           (org-hexagon-update-property-drawer beg end properties))

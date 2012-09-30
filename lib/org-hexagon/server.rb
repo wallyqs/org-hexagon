@@ -57,13 +57,23 @@ module OrgHexagon
                  :message => "Error when parsing the request" }.to_json.to_s
       end
 
-      if text['content']
-        t = Text.create(text)
-      else
-        return { :status => 500, :message => "Org text content was empty" }.to_json.to_s
+      begin
+        if text['properties'] and text['properties']['id']
+          t = Text.find(text['properties']['id'])
+          unless t.update_attributes(text)
+            return { :status => 500, :message => "Could not save the text" }.to_json.to_s
+          end
+        elsif text['content']
+          t = Text.create(text)
+        else
+          return { :status => 500, :message => "Org text content was empty" }.to_json.to_s
+        end
+      rescue => e
+        puts e
+        return { :status => 500, :message => "Could not save the text" }.to_json.to_s
       end
 
-      { :status => 200, :message => "OK", :_id => t.id }.to_json.to_s
+      { :status => 200, :message => "OK", :id => t.id }.to_json.to_s
     end
 
     get '/api/shelves/:shelf.:format' do
