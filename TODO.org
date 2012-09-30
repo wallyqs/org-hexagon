@@ -1,25 +1,28 @@
 #+TITLE: Org Hexagon Development
 
-* [2/5] API Client
+* [3/5] API Client!!
 ** DONE Create buffer with all texts
 ** DONE Post a new text
-** TODO Update a text
+** DONE Update a text
 ** TODO Auth request
 ** TODO Insert id in text first headline
-* [1/3] API Backend
-** DONE Basic API
+* API Backend
+** Basic API
 *** DONE GET /api/texts.json
 
 Gets a buffer with all texts so far.
 
-*** DONE POST /api/texts.json - 
+*** DONE PUT /api/texts.json
 
 Creates or updates a new text.
-** TODO Authentication
+
+** Model 
+*** DONE Add versioning to the model
+** Authentication
 
 Basic Authentication with Warden
 
-** TODO Feature :: Ignore all headlines but the first one
+** Feature :: Ignore all headlines but the first one
 * [1/2] Deploying
 ** DONE Cloudfoundry support
 ** TODO Config with YAML file
@@ -36,7 +39,7 @@ Used the awesome http://html5boilerplate.com/ for this.
    CLOCK: [2012-09-15 Sat 20:40]--[2012-09-15 Sat 20:48] =>  0:08
 
 ** DONE Layout for all texts
-* TODO [#A] Feature :: Shelves
+* TODO Feature :: Shelves
 
 By setting =:shelf:= in the properties drawer, you should be able
 to tag the text so that they can be accessed through a special route.
