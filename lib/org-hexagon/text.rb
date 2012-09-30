@@ -4,6 +4,9 @@ require 'org-ruby'
 module OrgHexagon
   class Text
     include Mongoid::Document
+    include Mongoid::Timestamps
+    include Mongoid::Versioning
+    max_versions 10
 
     def title
       parsed_content = Orgmode::Parser.new(self.content)
