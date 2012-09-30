@@ -77,11 +77,13 @@ NOTE: _id cannot be used as an identifier so we use :id: all the time"
 
 (defun org-hexagon-update-property-drawer(region-begin region-end properties)
   "Given the beginning and start of the property-drawer in the text,
-this will update the property-drawer with the fields in the assoc list"
+this will update the property-drawer with the fields in the assoc list.
+If no property-drawer was present at the time, it will create one."
 
   (let* ((property-drawer-range 
 	  (org-get-property-block region-begin region-end)))
-
+    
+    (goto-char region-begin)
     (if property-drawer-range
 	(setq property-drawer-beg (car property-drawer-range))
       ;; In case we don't have a property drawer, create it here
@@ -90,6 +92,7 @@ this will update the property-drawer with the fields in the assoc list"
 	(org-cycle 3)
 	(next-line 1)
 	(setq property-drawer-beg (point))))
+    (goto-char property-drawer-beg)
 
     ;; Make a list of the current properties again into an assoc list
     ;; TODO
