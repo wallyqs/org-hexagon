@@ -18,8 +18,6 @@
           (if data (encode-coding-string data 'utf-8)))
          (buf))
 
-    (pp data)
-
     (setq buf (url-retrieve-synchronously url))
     (with-current-buffer buf
       (goto-char url-http-end-of-headers)
@@ -27,28 +25,52 @@
         (kill-buffer))
       )))
 
-(defun org-hexagon-all-texts ()
+(defun org-hexagon-texts()
   "Creates a buffer with all the texts so far merged"
   (interactive)
 
   (let* ((json
           (org-hexagon-request
            "GET" (concat org-hexagon-api-url "texts.json")))
-         (buf (get-buffer-create "*Org Hexagon Texts*")))
-
-    (with-current-buffer buf
-      (mapcar (lambda(org-text)
-                (insert
-                 (concat
-                  (cdr
-                   (assoc 'content org-text)) "\n"))
-                ) json))
+	 (buf (org-hexagon-create-shelf-buffer json "*Org Hexagon Texts*")))
 
     (switch-to-buffer buf)
     (org-mode)))
 
+(defun org-hexagon-shelf()
+  "Creates a buffer with all the texts from a shelf."
+  (interactive)
+
+  (let* ((shelf-name (read-string "Shelf: "))
+	 (json 
+	  (org-hexagon-request
+	   "GET" (concat org-hexagon-api-url "shelves/" shelf-name ".json")))
+	 (shelf-buffer-title (concat "*Org Hexagon Shelf: " shelf-name "*"))
+	 (buf (org-hexagon-create-shelf-buffer json shelf-buffer-title)))
+
+    (message (concat "Getting texts from " shelf-name))
+    (switch-to-buffer buf)
+    (org-mode)))
+
+(defun org-hexagon-create-shelf-buffer(json &optional shelf-buffer-title)
+  "Creates a buffer from the json string of the request."
+
+  (let* ((buf (get-buffer-create shelf-buffer-title)))
+    (with-current-buffer buf
+      (mapcar (lambda(org-text)
+		(insert
+		 (concat
+		  (cdr
+		   (assoc 'content org-text)) "\n"))
+		) json))
+    buf))
+
 (defun org-hexagon-sync-text-region(beg end)
-  "Create org-mode text from region.
+  "Create or update org-mode text from region.
+In case an :id: is present in the propety drawer, it will
+attempt to use it to update the text rather than creating another one.
+In case of update, it will also sync the properties
+from the text in the property drawer.
 NOTE: _id cannot be used as an identifier so we use :id: all the time"
   (interactive "r")
 
