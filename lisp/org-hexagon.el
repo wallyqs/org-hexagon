@@ -159,7 +159,7 @@ It is based on some code found within org.el.
                 (org-re "^[ \t]*:\\([[:alpha:]][[:alnum:]_-]*\\):[ \t]*\\(\\S-.*\\)?")
                 (cdr property-drawer-range) ;; boundary
                 t)
-          (setq key (org-match-string-no-properties 1)
+          (setq key (downcase (org-match-string-no-properties 1))
                 value (org-trim (or (org-match-string-no-properties 2) "")))
           (unless (member key excluded)
             (push (cons key (or value "")) property-drawer-list))) ;; end of while
