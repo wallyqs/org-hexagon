@@ -7,9 +7,10 @@ module OrgHexagon
 
     set :root, File.expand_path(File.join(File.dirname(__FILE__), '..', '..'))
 
+    # Main hexagon
     get '/' do
       @texts = Text.all
-      erb :main
+      erb :texts
     end
 
     not_found do
@@ -18,7 +19,7 @@ module OrgHexagon
 
     get '/texts' do
       @texts = Text.all
-      erb :main
+      erb :texts
     end
 
     get '/texts/:id' do
@@ -26,6 +27,13 @@ module OrgHexagon
       halt 404 unless @text
 
       erb :text
+    end
+
+    get '/shelves/:shelf' do
+      shelf = params[:shelf]
+      @texts = Text.where('properties.shelf' => shelf)
+
+      erb :texts
     end
 
     # API

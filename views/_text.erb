@@ -1,0 +1,11 @@
+<div class="content">
+  <div class="text-description">
+    <!-- date written -->
+    [<a href="/texts/<%= text.id %>">text</a>]
+    [<a href="/shelves/<%= text.shelf %>">shelf: <%= text.shelf %></a>]
+  </div>
+  <div class="text">
+    <%= text.to_html %>
+  </div>
+  <hr />
+</div>

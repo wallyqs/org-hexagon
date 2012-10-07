@@ -1,12 +1,54 @@
-* {
-    font-family: 'Hoefler Text', Cambria, Georgia, 'Times New Roman', Times, serif;
+body {
+    font-family: 'PT Serif', 'Adobe Garamond Pro', Georgia, Cambria, 'Times New Roman', Times, serif;
+    background-color: #FDFDFD;
 }
 
+.header {
+    width:      740px;
+    margin:     0 auto;
+    /* text-align: center; */
+    border-bottom: 2px solid;
+    border-color: #eeeeee;
+    margin-bottom: 10px;
+    font-size: 1.12em;
+    }
+    .header h1 a:hover {
+	text-decoration: none;
+    }
+    .header .hexagon-links {
+	margin-top: 5px;
+    }
 
 
+.content {
+    width: 740px;
+    margin: 0 auto;
+    font-size: 1.22em;
+}
 
+.src span {
+    font-family: monospace;
+}
 
+a {
+    color: #333333;
+  }
+  a:hover {
+      color: #333333;
+      text-decoration: underline;
+  }
 
+.texts {
+    /* width: 772px */;
+}
 
+.text-description {
+    text-align: center;
+}
 
-
+div.footer p {
+    color: #777;
+    text-align: center;
+    margin: 0 auto;
+    margin-bottom: 15px;
+}

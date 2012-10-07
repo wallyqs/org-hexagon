@@ -34,5 +34,13 @@ module OrgHexagon
     def to_html
       parsed_org_text.to_html
     end
+
+    def shelf
+      if self.attributes.include?('properties') && self.properties && self.properties['shelf']
+        self.properties['shelf']
+      else
+        nil
+      end
+    end
   end
 end
