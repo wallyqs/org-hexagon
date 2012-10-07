@@ -23,10 +23,16 @@ module OrgHexagon
     end
 
     get '/texts/:id' do
-      @text = Text.where(:_id => params[:id]).first
+      text_id, format = params[:id].split('.')
+      @text = Text.where(:_id => text_id).first
       halt 404 unless @text
 
-      erb :text
+      if format == 'org'
+        content_type 'text/plain'
+        @text.content
+      else
+        erb :text
+      end
     end
 
     get '/shelves/:shelf' do
