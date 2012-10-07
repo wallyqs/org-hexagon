@@ -2,6 +2,6 @@
   <%= erb :_header %>
 
   <% @texts.reverse.each do |text| %>
-    <%= erb :_text, :layout => false, :locals => { :text => text} %>
+    <%= erb :_text, :layout => false, :locals => { :text => text } %>
   <% end %>
 </div> <!-- /container -->

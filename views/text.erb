@@ -1,10 +1,5 @@
 <div class="container">
   <%= erb :_header %>
 
-  <div class="row content">
-
-      <%= @text.to_html %>
-      <hr />
-
-  </div>
+  <%= erb :_text, :layout => false, :locals => { :text => @text } %>
 </div> <!-- /container -->

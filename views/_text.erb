@@ -1,8 +1,14 @@
 <div class="content">
   <div class="text-description">
     <!-- date written -->
-    [<a href="/texts/<%= text.id %>">text</a>]
-    [<a href="/shelves/<%= text.shelf %>">shelf: <%= text.shelf %></a>]
+    <em>
+      <a href="/texts/<%= text.id %>">
+        Written on <%= text.created_at.strftime("%b/%d, %Y") %>
+      </a>
+    </em>
+    <% if text.shelf %>
+      / <a href="/shelves/<%= text.shelf %>"><%= text.shelf %></a>
+    <% end %>
   </div>
   <div class="text">
     <%= text.to_html %>
