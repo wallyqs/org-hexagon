@@ -7,7 +7,6 @@ module OrgHexagon
 
     set :root, File.expand_path(File.join(File.dirname(__FILE__), '..', '..'))
 
-    # Main hexagon
     get '/' do
       @texts = Text.all
       erb :texts

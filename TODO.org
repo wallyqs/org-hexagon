@@ -1,13 +1,21 @@
 #+TITLE: Org Hexagon Development
 
-* [3/5] API Client!!
+* API Client
 ** DONE Create buffer with all texts
 ** DONE Post a new text
 ** DONE Update a text
+** DONE Insert id in text first headline
 ** TODO Auth request
-** TODO Insert id in text first headline
+
+# TODO
+# - Set the following in your =.emacs=:
+#   #+begin_src emacs-lisp
+#     (setq org-hexagon-auth '("librarian" . "secret"))
+#   #+end_src
+
+** TODO Select available shelves rather than typing
 * API Backend
-** Basic API
+** DONE Basic API
 *** DONE GET /api/texts.json
 
 Gets a buffer with all texts so far.
@@ -16,30 +24,29 @@ Gets a buffer with all texts so far.
 
 Creates or updates a new text.
 
-** Model 
-*** DONE Add versioning to the model
-** Authentication
+** TODO Authentication
 
 Basic Authentication with Warden
 
-** Feature :: Ignore all headlines but the first one
-* [1/2] Deploying
+* Deploying
 ** DONE Cloudfoundry support
-** TODO Config with YAML file
-* [3/3] Testing
+** TODO Config Mongodb with YAML file
+# TODO
+# You need to have a MongoDB data store available so that the texts can be saved,
+# so you also need to modify the =config/mongo.yml= to point it your MongoDB.
+* Testing
 ** DONE Setup Rspec tests
 ** DONE server_spec.org
 ** DONE text_spec.org
-* [3/3] Site
+* Site
 ** DONE Scaffold the layout from the site
 
 Used the awesome http://html5boilerplate.com/ for this.
 
 ** DONE Layout for individual text
-   CLOCK: [2012-09-15 Sat 20:40]--[2012-09-15 Sat 20:48] =>  0:08
-
 ** DONE Layout for all texts
-* TODO Feature :: Shelves
+* Ideas
+** DONE Feature :: Shelves
 
 By setting =:shelf:= in the properties drawer, you should be able
 to tag the text so that they can be accessed through a special route.
@@ -58,24 +65,29 @@ Writing...
 Then the text would become available under routes like:
 
 #+begin_src ruby
-get '/:shelf/:id'
 get '/api/shelves/:shelf.json'
 #+end_src
 
-After the text is created, the =:_id:= attribute is appended to the text,
+After the text is created, the =:id:= attribute is appended to the text,
 so that it can be updated.
 
 #+begin_src org
  * Some writing
   :PROPERTIES:
-  :_id:      98128912981289
   :shelf:    ideas
   :END:
 
 Writing updated...
 #+end_src
 
-* TODO Feature :: Blog shelf
+** TODO Ignore all headlines but the first one
+
+Only allow texts that have at lease a single first level headline.
+
+If there is no first headline, insert a generic one.
+
+** TODO Add versioning to the Text
+** TODO Feature :: Blog shelf
 
 This would create a route like:
 
@@ -99,7 +111,11 @@ the following attributes in the properties drawer.
   Example blog post
 #+end_src
 
-* TODO Feature :: Bookmarks shelf
+# TODO
+# A publicly accessible url =http://your-url.com/blog/hello-world= will be available,
+# as well as a url like =http://your-url.com/texts/1= which only you will be able to browse.
+
+** TODO Feature :: Bookmarks shelf
 
 This is a special shelf that makes a list of links a-la HN.
 

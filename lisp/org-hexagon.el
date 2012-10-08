@@ -1,4 +1,4 @@
-;; Client for the API from OrgHexagon
+;; Client for the API for OrgHexagon
 (require 'org)
 (require 'url)
 (require 'json)
@@ -6,8 +6,8 @@
 (defvar url-http-end-of-headers)
 (defvar url-http-response-status)
 
-(setq org-hexagon-url "http://127.0.0.1:9393/")
-(setq org-hexagon-api-url "http://127.0.0.1:9393/api/")
+;; Need to set this to fetch the org-mode texts
+;; (setq org-hexagon-api-url "http://127.0.0.1:9393/api/")
 
 (defun org-hexagon-request (method url &optional data)
   "Returns a JSON object with the contents from the request"
@@ -167,3 +167,5 @@ It is based on some code found within org.el.
       ;; return
       property-drawer-list)
     ))
+
+(provide 'org-hexagon)
