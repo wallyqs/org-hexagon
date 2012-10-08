@@ -1,5 +1,3 @@
-/NOTE: This is a work in progress/
-
 * OrgHexagon
 
 #+begin_quote
@@ -16,6 +14,10 @@ absolute space or, at least, of our intuition of space.
 
 OrgHexagon is a simple Sinatra application that features an API
 which can be called through Emacs to publish texts written in org-mode.
+
+Warning: This is still pretty much a work in progress, 
+so many things will be broken... But if you find something like this useful
+any feedback will be very welcome!
 
 ** Motivation
 
@@ -36,7 +38,11 @@ Clone this repository:
 git clone git://github.com/wallyqs/org-hexagon
 bundle install
 bundle package
+
+bundle exec rackup
 #+end_src
+
+...then run MongoDB on the default port to save your texts.
 
 Some notes about the setup:
 
@@ -45,7 +51,7 @@ Some notes about the setup:
 
 - By default it is going to use =Coderay= to highlight the source blocks.
   In case you want to use =pygments.rb= you need to include this gem
-  in the Gemfile.
+  in the Gemfile, as well as the stylesheets you might need in public.
 
 - It includes some built-in support to run it on Cloudfoundry.
   Just =vmc create-service mongodb= and =vmc bind-service= your MongoDB to save the texts.
@@ -80,7 +86,7 @@ You will be able to view your post online at =http://your-url.com/texts=.
 Or you can also fetch create a buffer with all of your posted texts
 by calling =M-x org-hexagon-texts=.
 
-** Using PROPERTIES to modify publishing settings of your text
+** Using :PROPERTIES: drawer to add metadata to your texts
 
 You can use the =PROPERTIES= drawer from org-mode to configure
 the way you want to publish the text.
