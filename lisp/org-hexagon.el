@@ -1,4 +1,30 @@
-;; Client for the API for OrgHexagon
+;;; org-hexagon.el --- Client for the OrgHexagon API
+
+;; Copyright (C) 2012 Waldemar Quevedo
+
+;; Version: 0.0.1
+;; Keywords: org-mode 
+;; Author: Waldemar Quevedo <waldemar.quevedo@gmail.com>
+;; URL: http://github.com/wallyqs/org-hexagon
+
+;; This file is not part of GNU Emacs.
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 2, or (at your option)
+;; any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, write to the Free Software
+;; Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+;;; Code:
+
 (require 'org)
 (require 'url)
 (require 'json)
@@ -129,7 +155,6 @@ If no property-drawer was present at the time, it will create one."
       )
     (message "Org Hexagon Text Synced!")))
 
-;; helper methods
 (defun org-hexagon-preprocess-property-drawer-string (org-text-region)
   "This function creates an assoc list of the values inside of
 the PROPERTIES drawer of the _first level_ of the ORG-TEXT-REGION string,

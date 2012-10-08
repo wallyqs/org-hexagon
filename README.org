@@ -1,3 +1,5 @@
+/NOTE: This is a work in progress/
+
 * OrgHexagon
 
 #+begin_quote
@@ -10,18 +12,23 @@ absolute space or, at least, of our intuition of space.
                     - Jorge Luis Borges, The Library of Babel
 #+end_quote
 
-** TODO Introduction
+** Introduction
 
 OrgHexagon is a simple Sinatra application that features an API
 which can be called through Emacs to publish texts written in org-mode.
 
-*** Objectives
+** Motivation
 
-- [ ] Have an API to publish texts written in org-mode from Emacs through HTTP
-- [ ] Relatively simple to deploy (e.g. not having to setup Emacs on the server)
-- [ ] Minimal layout design
+- Have an application to test OrgRuby parsing output quickly
 
-** TODO How to setup
+- Have a place to archive and publish whatever I write in org-mode.
+  These could be drafts, bookmarks, ideas etc...
+
+- Relatively simple to deploy (e.g. not having to setup Emacs on the server)
+
+- Minimal layout design
+
+** How to setup
 
 Clone this repository:
 
@@ -30,9 +37,6 @@ git clone git://github.com/wallyqs/org-hexagon
 bundle install
 bundle package
 #+end_src
-
-You need to have a MongoDB data store available so that the texts can be saved,
-so you also need to modify the =config/mongo.yml= to point it your MongoDB.
 
 Some notes about the setup:
 
@@ -44,18 +48,21 @@ Some notes about the setup:
   in the Gemfile.
 
 - It includes some built-in support to run it on Cloudfoundry.
-  Just =create-service mongodb= and =bind-service= your MongoDB to save the texts.
+  Just =vmc create-service mongodb= and =vmc bind-service= your MongoDB to save the texts.
 
-** TODO Setting up the client
+** Setting up the client
 
 - Load the =org-hexagon.el= client included in this repo.
 
-- Set the following in your =.emacs=:
-  #+begin_src emacs-lisp
-    (setq org-hexagon-auth '("librarian" . "secret"))
-  #+end_src
+#+begin_src emacs-lisp
+(add-to-list 'load-path "~/org-hexagon/lisp")
+(require 'org-hexagon)
 
-** TODO How to use
+;; set the url to your instance of the app
+(setq org-hexagon-api-url "http://127.0.0.1:9393/api/")
+#+end_src
+
+** How to use
 
 Open a buffer with some org-mode text:
 
@@ -66,29 +73,30 @@ Open a buffer with some org-mode text:
 
 #+end_src
 
-Then use =M-x org-hexagon-sync-text= in the buffer to publish org-mode text.
+Select the region, and then use =M-x org-hexagon-sync-text-region= in the buffer to save this org-mode text.
 
 You will be able to view your post online at =http://your-url.com/texts=.
 
-** TODO Using PROPERTIES to modify publishing settings of your text
+Or you can also fetch create a buffer with all of your posted texts
+by calling =M-x org-hexagon-texts=.
+
+** Using PROPERTIES to modify publishing settings of your text
 
 You can use the =PROPERTIES= drawer from org-mode to configure
 the way you want to publish the text.
 
-For example, if you post a the text with the following properties:
+For example, if you post a text with the following properties:
 
 #+begin_src org
   * Hello world
     :PROPERTIES:
-    :id:       1
-    :slug:     hello-world
-    :shelf:    blog
-    :public:   yes
+    :id:       1234567
+    :shelf:    drafts
     :END:
 #+end_src
 
-A publicly accessible url =http://your-url.com/blog/hello-world= will be available,
-as well as a url like =http://your-url.com/texts/1= which only you will be able to browse.
+It will try to update the text with that id, and tag the text with the property =shelf: blog=.
+Texts with this property can be obtained using =M-x org-hexagon-shelf= and then typing 'drafts'.
 
 * LICENSE
 
