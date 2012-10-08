@@ -1,6 +1,6 @@
 * OrgHexagon
 
-#+begin_quote
+#+BEGIN_QUOTE
 The universe (which others call the Library) is composed of an
 indefinite and perhaps infinite number of hexagonal galleries, with
 vast air shafts between, surrounded by very low railings. (...)
@@ -8,25 +8,32 @@ The idealists argue that the hexagonal rooms are a necessary form of
 absolute space or, at least, of our intuition of space.
 
                     - Jorge Luis Borges, The Library of Babel
-#+end_quote
+#+END_QUOTE
+
+#+BEGIN_CENTER
+
+[[http://orgmode.org/worg/images/babel/library-of-babel.png]]
+
+The Library of Babel, by Pierre Clayette
+#+END_CENTER
 
 ** Introduction
 
 OrgHexagon is a simple Sinatra application that features an API
 which can be called through Emacs to publish texts written in org-mode.
 
-Warning: This is still pretty much a work in progress, 
+This is still pretty much a work in progress, 
 so many things will be broken... But if you find something like this useful
 any feedback will be very welcome!
 
-** Motivation
+** Motivation/Objectives
 
 - Have an application to test OrgRuby parsing output quickly
 
 - Have a place to archive and publish whatever I write in org-mode.
   These could be drafts, bookmarks, ideas etc...
 
-- Relatively simple to deploy (e.g. not having to setup Emacs on the server)
+- Make it relatively simple to deploy (e.g. not having to setup Emacs on the server)
 
 - Minimal layout design
 
@@ -34,13 +41,13 @@ any feedback will be very welcome!
 
 Clone this repository:
 
-#+begin_src sh
+#+BEGIN_SRC sh
 git clone git://github.com/wallyqs/org-hexagon
 bundle install
 bundle package
 
 bundle exec rackup
-#+end_src
+#+END_SRC
 
 ...then run MongoDB on the default port to save your texts.
 
@@ -60,13 +67,16 @@ Some notes about the setup:
 
 - Load the =org-hexagon.el= client included in this repo.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/org-hexagon/lisp")
 (require 'org-hexagon)
 
 ;; set the url to your instance of the app
 (setq org-hexagon-api-url "http://127.0.0.1:9393/api/")
-#+end_src
+
+;; ...or I have an instance set up in Cloudfoundry which can be used by anyone to try it
+(setq org-hexagon-api-url "http://org-hexagon-demo.cloudfoundry.com/api/")
+#+END_SRC
 
 ** How to use
 
@@ -106,7 +116,7 @@ Texts with this property can be obtained using =M-x org-hexagon-shelf= and then 
 
 * LICENSE
 
-#+begin_quote
+#+BEGIN_QUOTE
 Copyright (C) 2012 Quevedo, Waldemar
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -120,4 +130,4 @@ Copyright (C) 2012 Quevedo, Waldemar
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-#+end_quote
+#+END_QUOTE
