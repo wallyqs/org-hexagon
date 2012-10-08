@@ -42,6 +42,9 @@
          (url-request-method method)
          (url-request-data
           (if data (encode-coding-string data 'utf-8)))
+	 ;; url-retrieve-synchronously fails sometimes with nginx responses
+	 ;; See http://stackoverflow.com/questions/3011369/accessing-stackexchange-api-from-emacs
+	 (url-mime-encoding-string "identity")
          (buf))
 
     (setq buf (url-retrieve-synchronously url))
