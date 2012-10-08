@@ -105,10 +105,10 @@ For example, if you post a text with the following properties:
 
 #+BEGIN_SRC org
   * Hello world
-    :PROPERTIES:
-    :id:       1234567
-    :shelf:    drafts
-    :END:
+　　:PROPERTIES:
+　　:id:       1234567
+　　:shelf:    drafts
+　　:END:
 #+END_SRC
 
 It will try to update the text with that id, and tag the text with the property =shelf: blog=.
