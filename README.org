@@ -82,12 +82,12 @@ Some notes about the setup:
 
 Open a buffer with some org-mode text:
 
-#+begin_src org
+#+BEGIN_SRC org
   * Hello world
 
   Writing using =org-mode= markup to be published.
 
-#+end_src
+#+END_SRC
 
 Select the region, and then use =M-x org-hexagon-sync-text-region= in the buffer to save this org-mode text.
 
@@ -103,13 +103,13 @@ the way you want to publish the text.
 
 For example, if you post a text with the following properties:
 
-#+begin_src org
+#+BEGIN_SRC org
   * Hello world
     :PROPERTIES:
     :id:       1234567
     :shelf:    drafts
     :END:
-#+end_src
+#+END_SRC
 
 It will try to update the text with that id, and tag the text with the property =shelf: blog=.
 Texts with this property can be obtained using =M-x org-hexagon-shelf= and then typing 'drafts'.
