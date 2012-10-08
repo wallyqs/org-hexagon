@@ -63,6 +63,8 @@ Some notes about the setup:
 - It includes some built-in support to run it on Cloudfoundry.
   Just =vmc create-service mongodb= and =vmc bind-service= your MongoDB to save the texts.
 
+A demo can be seen here: [[http://org-hexagon-demo.cloudfoundry.com/]]
+
 ** Setting up the client
 
 - Load the =org-hexagon.el= client included in this repo.
