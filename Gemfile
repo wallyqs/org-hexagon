@@ -7,9 +7,6 @@ gem 'bson_ext'
 gem 'org-ruby'
 gem 'coderay'
 
-# For running in Cloudfoundry
-gem 'cf-runtime'
-
 group :development do
   gem 'shotgun'
 end

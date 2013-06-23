@@ -1,3 +1,5 @@
+# org-hexagon/text.rb
+
 require 'mongoid'
 require 'org-ruby'
 
@@ -40,5 +42,6 @@ module OrgHexagon
         nil
       end
     end
-  end
-end
+
+  end # class
+end # module

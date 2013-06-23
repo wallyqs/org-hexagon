@@ -1,3 +1,5 @@
+# org-hexagon/lib/server.rb
+
 require 'sinatra/base'
 require 'org-hexagon/text'
 require 'org-ruby'
@@ -67,7 +69,7 @@ module OrgHexagon
         text = JSON.parse(json)
       rescue => e
         return { :status => 500,
-                 :message => "Error when parsing the request" }.to_json.to_s
+          :message => "Error when parsing the request" }.to_json.to_s
       end
 
       begin
@@ -97,5 +99,5 @@ module OrgHexagon
 
       texts.to_json
     end
-  end
-end
+  end # class
+end # module

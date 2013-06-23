@@ -1,0 +1,228 @@
+#+TITLE: Org hexagon library
+
+** TODO [0/5] Fixes needed
+
+- [ ] Setup authentication with an environment variable
+- [ ] Plan to use something else rather than Mongo to deploy to Heroku
+- [ ] Need something need to indent properly again after Org babel is called.
+- [ ] Client needs the PROPERTIES drawer to exist in order to update the text
+- [ ] Client inserts the id on every update
+
+** OrgHexagon::Config
+
+Here we just create the connection for the MongoDB.
+
+#+begin_src ruby :tangle org-hexagon/config.rb :shebang # org-hexagon/config.rb
+  require 'sinatra'
+  require 'mongoid'
+  
+  module OrgHexagon
+    Mongoid.configure do |config|
+      config.master = Mongo::Connection.new.db('org_hexagon')
+    end
+  end
+#+end_src
+
+** OrgHexagon::Text model
+
+We define a mongoid model to use for the texts.
+
+#+begin_src ruby :tangle org-hexagon/text.rb :shebang # org-hexagon/text.rb
+require 'mongoid'
+require 'org-ruby'
+
+module OrgHexagon
+  class Text
+    include Mongoid::Document
+    include Mongoid::Timestamps
+    include Mongoid::Versioning
+    max_versions 10
+#+end_src
+
+Resolving the text title is very important since we want to use this
+as part of the slug from the text. Firstly, we rely on the in buffer
+setting =#+TITLE:=, and if not present, then we use the content from
+the first headline in the text.
+
+#+begin_src ruby :tangle org-hexagon/text.rb
+    def title
+      org = Orgmode::Parser.new(self.content)
+
+      # First try to pick the title from the org-mode settings
+      if not org.in_buffer_settings['TITLE'].nil?
+        title = org.in_buffer_settings['TITLE']
+      else
+        # If we could not get title from org-mode,
+        # we extract it from the first headline in textile
+        textile = org.to_textile
+        title = textile.lines.first.gsub(/^\w+\.\s?/, '').chomp
+      end
+
+      title
+    rescue => e
+      puts e
+      'untitled'
+    end
+
+    def to_html
+      Orgmode::Parser.new(self.content).to_html
+    rescue
+      'Could not parse text!'
+    end
+#+end_src
+
+One of the best things from Org mode is that we can stuff in whatever
+we want into the =:PROPERTIES:= drawer. Here we take advantage of it
+and put whatever was post by the client.
+
+#+begin_src ruby :tangle org-hexagon/text.rb
+    def shelf
+      if self.attributes.include?('properties') && self.properties && self.properties['shelf']
+        self.properties['shelf']
+      else
+        nil
+      end
+    end
+#+end_src
+
+Wrap up the module.
+
+#+begin_src ruby :tangle org-hexagon/text.rb
+  end # class
+end # module
+#+end_src
+
+** org-hexagon.rb :: Require the libraries
+
+We need to require the relevant libraries that we have developed here:
+
+#+begin_src ruby :tangle org-hexagon.rb :shebang # org-hexagon.rb
+$:.unshift(File.dirname(__FILE__))
+
+require 'org-hexagon/config'
+require 'org-hexagon/text'
+require 'org-hexagon/server'
+#+end_src
+
+** OrgHexagon::Server
+
+#+begin_src ruby :tangle org-hexagon/server.rb :shebang # org-hexagon/lib/server.rb
+require 'sinatra/base'
+require 'org-hexagon/text'
+require 'org-ruby'
+
+module OrgHexagon
+  class Server < Sinatra::Base
+
+    set :root, File.expand_path(File.join(File.dirname(__FILE__), '..', '..'))
+
+    get '/' do
+      @texts = Text.all
+      erb :texts
+    end
+
+    not_found do
+      erb :"404"
+    end
+
+    get '/texts' do
+      @texts = Text.all
+      erb :texts
+    end
+#+end_src
+
+We need to to make it possible to fetch the original org content in
+plain text too:
+
+#+begin_src ruby :tangle org-hexagon/server.rb
+    get '/texts/:id' do
+      text_id, format = params[:id].split('.')
+      @text = Text.where(:_id => text_id).first
+      halt 404 unless @text
+
+      if format == 'org'
+        content_type 'text/plain'
+        @text.content
+      else
+        erb :text
+      end
+    end
+
+#+end_src
+
+A =shelf= is a special property that can be set within the
+=:PROPERTIES:= from an Org mode headline. It can be used to tag the
+texts to be part of a collection.
+
+#+begin_src ruby :tangle org-hexagon/server.rb
+    get '/shelves/:shelf' do
+      shelf = params[:shelf]
+      @texts = Text.where('properties.shelf' => shelf)
+
+      erb :texts
+    end
+#+end_src
+
+The =/api= routes are those used by the client to send the data from
+an emacs buffer. Most of the handling is done in JSON.
+
+#+begin_src ruby :tangle org-hexagon/server.rb
+    # API
+    get '/api/texts.:format' do
+      content_type 'application/json'
+      @texts = Text.all
+
+      @texts.to_json
+    end
+
+    get '/api/texts/:id.:format' do
+      content_type 'application/json'
+
+      text = Text.where(:_id => params[:id]).first
+      halt 404 unless text
+
+      return text.to_json
+    end
+
+    put '/api/texts.:format' do
+      content_type 'application/json'
+
+      json = request.body.read
+
+      begin
+        text = JSON.parse(json)
+      rescue => e
+        return { :status => 500,
+                 :message => "Error when parsing the request" }.to_json.to_s
+      end
+
+      begin
+        if text['properties'] and text['properties']['id']
+          t = Text.find(text['properties']['id'])
+          unless t.update_attributes(text)
+            return { :status => 500, :message => "Could not save the text" }.to_json.to_s
+          end
+        elsif text['content']
+          t = Text.create(text)
+        else
+          return { :status => 500, :message => "Org text content was empty" }.to_json.to_s
+        end
+      rescue => e
+        puts e
+        return { :status => 500, :message => "Could not save the text" }.to_json.to_s
+      end
+
+      { :status => 200, :message => "OK", :id => t.id }.to_json.to_s
+    end
+
+    get '/api/shelves/:shelf.:format' do
+      content_type 'application/json'
+
+      shelf = params[:shelf]
+      texts = Text.where('properties.shelf' => shelf)
+
+      texts.to_json
+    end
+  end # class
+end # module
+#+end_src
