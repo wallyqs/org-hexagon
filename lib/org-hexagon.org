@@ -12,7 +12,7 @@
 
 Here we just create the connection for the MongoDB.
 
-#+begin_src ruby :tangle org-hexagon/config.rb
+#+begin_src ruby :tangle org-hexagon/config.rb :shebang # org-hexagon/config.rb
   require 'sinatra'
   require 'mongoid'
   
@@ -27,7 +27,7 @@ Here we just create the connection for the MongoDB.
 
 We define a mongoid model to use for the texts.
 
-#+begin_src ruby :tangle org-hexagon/text.rb
+#+begin_src ruby :tangle org-hexagon/text.rb :shebang # org-hexagon/text.rb
 require 'mongoid'
 require 'org-ruby'
 
@@ -96,7 +96,7 @@ end # module
 
 We need to require the relevant libraries that we have developed here:
 
-#+begin_src ruby :tangle org-hexagon.rb
+#+begin_src ruby :tangle org-hexagon.rb :shebang # org-hexagon.rb
 $:.unshift(File.dirname(__FILE__))
 
 require 'org-hexagon/config'
@@ -106,7 +106,7 @@ require 'org-hexagon/server'
 
 ** OrgHexagon::Server
 
-#+begin_src ruby :tangle org-hexagon/server.rb
+#+begin_src ruby :tangle org-hexagon/server.rb :shebang # org-hexagon/lib/server.rb
 require 'sinatra/base'
 require 'org-hexagon/text'
 require 'org-ruby'

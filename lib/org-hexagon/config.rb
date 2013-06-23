@@ -1,3 +1,4 @@
+# org-hexagon/config.rb
 
 require 'sinatra'
 require 'mongoid'
